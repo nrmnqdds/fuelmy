@@ -9,15 +9,21 @@ import {
 import { Image } from "expo-image";
 import { useFonts } from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
-import { useCallback, useRef, useMemo } from "react";
+import { useCallback, useRef, useMemo, useState } from "react";
 import {
   BottomSheetModalProvider,
   BottomSheetModal,
 } from "@gorhom/bottom-sheet";
+import { AppRegistry, LogBox } from "react-native";
 import DisplayChart from "./components/DisplayChart";
 import RON95LOGO from "./assets/images/ron95.png";
 import RON97LOGO from "./assets/images/ron97.png";
 import DIESELLOGO from "./assets/images/diesel.png";
+
+LogBox.ignoreLogs(["Require cycle: node_modules/victory"]);
+
+// Keep the splash screen visible while we fetch resources
+SplashScreen.preventAutoHideAsync();
 
 const fuelData = [
   {
@@ -46,18 +52,18 @@ const App = () => {
     UberMedium: require("./assets/fonts/UberMoveMedium.otf"),
   });
 
+  const [selectedFuel, setSelectedFuel] = useState(fuelData[0]);
+
   // ref
   const bottomSheetModalRef = useRef();
 
   // variables
-  const snapPoints = useMemo(() => ["25%", "50%"], []);
+  const snapPoints = useMemo(() => ["50%", "75%"], []);
 
   // callbacks
-  const handlePresentModalPress = useCallback(() => {
+  const handlePresentModalPress = useCallback((item) => {
+    setSelectedFuel(item);
     bottomSheetModalRef.current?.present();
-  }, []);
-  const handleSheetChanges = useCallback((index) => {
-    // console.log("handleSheetChanges", index);
   }, []);
 
   const onLayoutRootView = useCallback(async () => {
@@ -69,9 +75,6 @@ const App = () => {
   if (!fontsLoaded) {
     return null;
   }
-
-  const blurhash =
-    "|rF?hV%2WCj[ayj[a|j[az_NaeWBj@ayfRayfQfQM{M|azj[azf6fQfQfQIpWXofj[ayj[j[fQayWCoeoeaya}j[ayfQa{oLj?j[WVj[ayayj[fQoff7azayj[ayj[j[ayofayayayj[fQj[ayayj[ayfjj[j[ayjuayj[";
 
   return (
     <BottomSheetModalProvider>
@@ -91,19 +94,18 @@ const App = () => {
             keyExtractor={(item) => item.id.toString()}
             renderItem={({ item }) => (
               <TouchableOpacity
-                onPress={handlePresentModalPress}
-                className="my-1 py-6 px-4 flex flex-row items-center justify-between bg-zinc-800 rounded-xl"
+                onPress={() => handlePresentModalPress(item)}
+                className="py-6 px-2 flex flex-row items-center justify-between"
               >
                 <View className="flex flex-row items-center justify-center">
                   <Image
                     source={item.image}
-                    placeholder={blurhash}
                     width={70}
                     height={70}
                     contentFit="contain"
                     transition={1000}
                   />
-                  <View className="px-4">
+                  <View className="px-1">
                     <Text
                       className="text-white text-lg"
                       style={{ fontFamily: "UberBold" }}
@@ -127,12 +129,10 @@ const App = () => {
         ref={bottomSheetModalRef}
         index={1}
         snapPoints={snapPoints}
-        onChange={handleSheetChanges}
         style={styles.bottomSheet}
       >
         <View className="flex-1 items-center">
-          <Text>Awesome 🎉</Text>
-          <DisplayChart fuelType="RON95" />
+          <DisplayChart fuelType={selectedFuel.name} />
         </View>
       </BottomSheetModal>
     </BottomSheetModalProvider>
@@ -141,7 +141,7 @@ const App = () => {
 
 const styles = StyleSheet.create({
   bottomSheet: {
-    backgroundColor: "#fff",
+    backgroundColor: "#1F2937",
     shadowColor: "#000000",
     shadowOffset: {
       width: 0,
