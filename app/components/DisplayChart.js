@@ -1,5 +1,12 @@
+import { View, Text } from "react-native";
 import { useState, useEffect } from "react";
 import { csv2json } from "csvjson-csv2json";
+import {
+  VictoryArea,
+  VictoryChart,
+  VictoryTheme,
+  VictoryAxis,
+} from "victory-native";
 
 const DisplayChart = ({ fuelType }) => {
   const [chartData, setChartData] = useState([{ month: "", price: "" }]);
@@ -28,6 +35,31 @@ const DisplayChart = ({ fuelType }) => {
         console.log(error);
       });
   }, [fuelType]);
+
+  return (
+    <View className="bg-zinc-800 flex-1 items-center pt-5">
+      <Text className="text-white">{fuelType}</Text>
+      <VictoryChart theme={VictoryTheme.material}>
+        <VictoryAxis
+          dependentAxis
+          tickFormat={(tick) => `${tick}`}
+          style={{
+            grid: { stroke: "#000000", strokeWidth: 0 },
+          }}
+        />
+        <VictoryArea
+          style={{ data: { fill: "#c43a31", opacity: 0.5 } }}
+          data={chartData}
+          animate={{
+            duration: 2000,
+            onLoad: { duration: 1000 },
+          }}
+          x="date"
+          y="price"
+        />
+      </VictoryChart>
+    </View>
+  );
 };
 
 export default DisplayChart;
