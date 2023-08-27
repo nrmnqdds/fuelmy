@@ -11,6 +11,10 @@ Tracks RON95, RON97 and Diesel price in Malaysia
 
 [Demo](https://github.com/qryskalyst20/fuelmy/assets/65181897/6e778af2-912f-4147-95ab-31c8abadb609)
 
+![smartmockups_lltdepd5](https://github.com/qryskalyst20/fuelmy/assets/65181897/f76f965b-06f6-4b22-9051-161b0dcf07f4)
+![smartmockups_lltdg45p](https://github.com/qryskalyst20/fuelmy/assets/65181897/9268126d-fa5c-458d-a9f3-3c93fd676a4c)
+
+
 ## :memo: Sources
 [OpenDOSM](https://open.dosm.gov.my/) - Department Of Statistics Malaysia
 
