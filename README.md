@@ -1,7 +1,11 @@
+
+
+
+
 # FuelMY
 Tracks RON95, RON97 and Diesel price in Malaysia
 
-![demo](https://imgur.com/a/ZJ5sbgO)
+https://github.com/qryskalyst20/fuelmy/assets/65181897/6e778af2-912f-4147-95ab-31c8abadb609
 
 
 # Expo Router Example
