@@ -1,5 +1,5 @@
-import { View, Text } from "react-native";
-import { useState, useEffect } from "react";
+import { View, Text, TouchableOpacity } from "react-native";
+import { useState, useEffect, useCallback } from "react";
 import { csv2json } from "csvjson-csv2json";
 import {
   VictoryLine,
@@ -8,9 +8,20 @@ import {
   VictoryAxis,
   VictoryVoronoiContainer,
 } from "victory-native";
+import * as Linking from "expo-linking";
+import { useFonts } from "expo-font";
+import * as SplashScreen from "expo-splash-screen";
+
+SplashScreen.preventAutoHideAsync();
 
 const DisplayChart = ({ fuelType }) => {
   const [chartData, setChartData] = useState([{ month: "", price: "" }]);
+  const [minPrice, setMinPrice] = useState(0);
+  const [lastPrice, setLastPrice] = useState(0);
+  const [fontsLoaded] = useFonts({
+    UberBold: require("../assets/fonts/UberMoveBold.otf"),
+    UberMedium: require("../assets/fonts/UberMoveMedium.otf"),
+  });
 
   useEffect(() => {
     fetch(
@@ -28,22 +39,50 @@ const DisplayChart = ({ fuelType }) => {
           .map((item) => ({
             date: item.date,
             price: item[fuelType.toLowerCase()],
-            // label: item[fuelType.toLowerCase()].toFixed(2),
           }));
         setChartData(filteredData);
         // console.log(filteredData);
+
+        // Find the minimum price value
+        const minPriceValue = Math.min(
+          ...filteredData.map((item) => item.price)
+        );
+        setMinPrice(minPriceValue);
+
+        // Find the last price value
+        const lastPriceValue = filteredData[filteredData.length - 1].price;
+        setLastPrice(lastPriceValue);
       })
       .catch((error) => {
         console.log(error);
       });
   }, [fuelType]);
 
+  const onLayoutRootView = useCallback(async () => {
+    if (fontsLoaded) {
+      await SplashScreen.hideAsync();
+    }
+  }, [fontsLoaded]);
+
+  if (!fontsLoaded) {
+    return null;
+  }
+
   return (
-    <View className="bg-zinc-800 flex-1 items-center pt-5">
-      <Text className="text-white">{fuelType}</Text>
+    <View
+      className="bg-zinc-800 flex-1 items-center pt-5"
+      onLayout={onLayoutRootView}
+    >
+      <Text className="text-white" style={{ fontFamily: "UberMedium" }}>
+        {fuelType}
+      </Text>
+      <Text
+        className="text-white text-3xl"
+        style={{ fontFamily: "UberBold" }}
+      >{`RM${lastPrice.toFixed(2)}`}</Text>
       <VictoryChart
         theme={VictoryTheme.material}
-        // domain={{ y: [1, 2.5] }}
+        minDomain={{ y: minPrice - 0.1 }}
         containerComponent={
           <VictoryVoronoiContainer
             labels={({ datum }) => `${datum.date}, ${datum.price.toFixed(2)}`}
@@ -70,6 +109,18 @@ const DisplayChart = ({ fuelType }) => {
           y="price"
         />
       </VictoryChart>
+      <View className="flex flex-row">
+        <Text className="text-white">Source: </Text>
+        <TouchableOpacity
+          onPress={() =>
+            Linking.openURL("https://open.dosm.gov.my/data-catalogue")
+          }
+        >
+          <Text className="text-blue-400">
+            https://open.dosm.gov.my/data-catalogue
+          </Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 };
