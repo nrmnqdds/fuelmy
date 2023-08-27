@@ -2,10 +2,11 @@ import { View, Text } from "react-native";
 import { useState, useEffect } from "react";
 import { csv2json } from "csvjson-csv2json";
 import {
-  VictoryArea,
+  VictoryLine,
   VictoryChart,
   VictoryTheme,
   VictoryAxis,
+  VictoryVoronoiContainer,
 } from "victory-native";
 
 const DisplayChart = ({ fuelType }) => {
@@ -27,6 +28,7 @@ const DisplayChart = ({ fuelType }) => {
           .map((item) => ({
             date: item.date,
             price: item[fuelType.toLowerCase()],
+            // label: item[fuelType.toLowerCase()].toFixed(2),
           }));
         setChartData(filteredData);
         // console.log(filteredData);
@@ -39,7 +41,15 @@ const DisplayChart = ({ fuelType }) => {
   return (
     <View className="bg-zinc-800 flex-1 items-center pt-5">
       <Text className="text-white">{fuelType}</Text>
-      <VictoryChart theme={VictoryTheme.material}>
+      <VictoryChart
+        theme={VictoryTheme.material}
+        domain={{ y: [1, 2.5] }}
+        containerComponent={
+          <VictoryVoronoiContainer
+            labels={({ datum }) => `${datum.date}, ${datum.price.toFixed(2)}`}
+          />
+        }
+      >
         <VictoryAxis
           dependentAxis
           tickFormat={(tick) => `${tick}`}
@@ -47,8 +57,10 @@ const DisplayChart = ({ fuelType }) => {
             grid: { stroke: "#000000", strokeWidth: 0 },
           }}
         />
-        <VictoryArea
-          style={{ data: { fill: "#c43a31", opacity: 0.5 } }}
+        <VictoryLine
+          style={{
+            data: { fill: "rgba(255, 41, 41, 0.2)", stroke: "#c43a41" },
+          }}
           data={chartData}
           animate={{
             duration: 2000,
