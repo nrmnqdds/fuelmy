@@ -43,7 +43,7 @@ const DisplayChart = ({ fuelType }) => {
       <Text className="text-white">{fuelType}</Text>
       <VictoryChart
         theme={VictoryTheme.material}
-        domain={{ y: [1, 2.5] }}
+        // domain={{ y: [1, 2.5] }}
         containerComponent={
           <VictoryVoronoiContainer
             labels={({ datum }) => `${datum.date}, ${datum.price.toFixed(2)}`}
