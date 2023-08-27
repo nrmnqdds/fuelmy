@@ -1,3 +1,4 @@
+import "expo-router/entry";
 import {
   SafeAreaView,
   Text,
