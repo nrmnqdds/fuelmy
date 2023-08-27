@@ -5,6 +5,7 @@ import {
   TouchableOpacity,
   FlatList,
   StyleSheet,
+  LogBox,
 } from "react-native";
 import { Image } from "expo-image";
 import { useFonts } from "expo-font";
@@ -14,7 +15,6 @@ import {
   BottomSheetModalProvider,
   BottomSheetModal,
 } from "@gorhom/bottom-sheet";
-import { AppRegistry, LogBox } from "react-native";
 import DisplayChart from "./components/DisplayChart";
 import RON95LOGO from "./assets/images/ron95.png";
 import RON97LOGO from "./assets/images/ron97.png";
@@ -54,13 +54,10 @@ const App = () => {
 
   const [selectedFuel, setSelectedFuel] = useState(fuelData[0]);
 
-  // ref
   const bottomSheetModalRef = useRef();
 
-  // variables
-  const snapPoints = useMemo(() => ["50%", "75%"], []);
+  const snapPoints = useMemo(() => ["50%", "60%"], []);
 
-  // callbacks
   const handlePresentModalPress = useCallback((item) => {
     setSelectedFuel(item);
     bottomSheetModalRef.current?.present();
