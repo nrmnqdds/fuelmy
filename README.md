@@ -1,6 +1,9 @@
 # FuelMY
 Tracks RON95, RON97 and Diesel price in Malaysia
 
+![demo](https://imgur.com/a/ZJ5sbgO)
+
+
 # Expo Router Example
 
 Use [`expo-router`](https://expo.github.io/router) to build native navigation using files in the `app/` directory.
