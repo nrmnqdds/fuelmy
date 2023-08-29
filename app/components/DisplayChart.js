@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity } from "react-native";
+import { View, Text, TouchableOpacity, ActivityIndicator } from "react-native";
 import { useState, useEffect, useCallback } from "react";
 import { csv2json } from "csvjson-csv2json";
 import {
@@ -76,10 +76,15 @@ const DisplayChart = ({ fuelType }) => {
       <Text className="text-white" style={{ fontFamily: "UberMedium" }}>
         {fuelType}
       </Text>
-      <Text
-        className="text-white text-3xl"
-        style={{ fontFamily: "UberBold" }}
-      >{`RM${lastPrice.toFixed(2)}`}</Text>
+
+      <View className="flex flex-row items-baseline">
+        <Text
+          className="text-white text-3xl"
+          style={{ fontFamily: "UberBold" }}
+        >{`RM${lastPrice.toFixed(2)}`}</Text>
+        <Text className="text-zinc-400">/litre</Text>
+      </View>
+
       <VictoryChart
         theme={VictoryTheme.material}
         minDomain={{ y: minPrice - 0.1 }}
@@ -120,6 +125,12 @@ const DisplayChart = ({ fuelType }) => {
             https://open.dosm.gov.my/data-catalogue
           </Text>
         </TouchableOpacity>
+      </View>
+      <View className="flex flex-row items-baseline">
+        <Text className="text-zinc-400">Last updated: </Text>
+        <Text className="text-zinc-400">
+          {chartData[chartData.length - 1]?.date}
+        </Text>
       </View>
     </View>
   );
