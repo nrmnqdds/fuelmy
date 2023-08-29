@@ -19,7 +19,7 @@ Tracks RON95, RON97 and Diesel price in Malaysia
 - Expo
 - TaiwindCSS
 
-## Installation
+## Installation 👷‍♂️
 1. Clone the repository `git clone https://github.com/qryskalyst20/fuelmy.git`
 2. Navigate to the project directory: `cd fuelmy`
 3. Install dependencies: `npm install`
